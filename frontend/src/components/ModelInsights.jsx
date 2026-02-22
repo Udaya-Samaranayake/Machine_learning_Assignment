@@ -16,16 +16,26 @@ const BAR_COLORS = [
   '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e',
 ]
 
-export default function ModelInsights() {
+export default function ModelInsights({ vegetable }) {
   const [info, setInfo] = useState(null)
   const [activePlot, setActivePlot] = useState(PLOTS[0].key)
   const [loading, setLoading] = useState(true)
+  const [plotLoading, setPlotLoading] = useState(false)
+  const [plotKey, setPlotKey] = useState(0)
 
   useEffect(() => {
     axios.get('/api/model-info')
       .then(res => setInfo(res.data))
       .finally(() => setLoading(false))
   }, [])
+
+  // When vegetable changes, show loading and pre-warm the cache
+  useEffect(() => {
+    if (!vegetable) return
+    setPlotLoading(true)
+    // Request the active plot to trigger generation; on load the img onLoad will clear loading
+    setPlotKey(prev => prev + 1)
+  }, [vegetable])
 
   if (loading) {
     return (
@@ -115,7 +125,7 @@ export default function ModelInsights() {
             <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
-            Explainability Visualizations (SHAP & PDP)
+            Explainability Visualizations{vegetable ? ` — ${vegetable.replace(/\s+(1kg|1Kg|500g|Bunch)\s*$/i, '').trim()}` : ' (SHAP & PDP)'}
           </h3>
         </div>
 
@@ -125,12 +135,11 @@ export default function ModelInsights() {
             {PLOTS.map(plot => (
               <button
                 key={plot.key}
-                onClick={() => setActivePlot(plot.key)}
-                className={`px-3 py-2.5 text-xs font-semibold rounded-xl transition-all duration-200 border ${
-                  activePlot === plot.key
+                onClick={() => { setActivePlot(plot.key); setPlotLoading(true); setPlotKey(prev => prev + 1) }}
+                className={`px-3 py-2.5 text-xs font-semibold rounded-xl transition-all duration-200 border ${activePlot === plot.key
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
-                }`}
+                  }`}
               >
                 {plot.label}
               </button>
@@ -138,11 +147,22 @@ export default function ModelInsights() {
           </div>
 
           {/* Plot image */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-inner">
+          <div className="relative border border-gray-200 rounded-xl overflow-hidden bg-white shadow-inner min-h-[200px]">
+            {plotLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-600 border-t-transparent"></div>
+                  <span className="text-sm text-gray-500">Generating plot for selected vegetable...</span>
+                </div>
+              </div>
+            )}
             <img
-              src={`/api/plots/${activePlot}`}
+              key={`${vegetable}-${activePlot}-${plotKey}`}
+              src={vegetable ? `/api/vegetable-plots/${encodeURIComponent(vegetable)}/${activePlot}` : `/api/plots/${activePlot}`}
               alt={activePlot}
               className="w-full h-auto"
+              onLoad={() => setPlotLoading(false)}
+              onError={() => setPlotLoading(false)}
             />
           </div>
         </div>
