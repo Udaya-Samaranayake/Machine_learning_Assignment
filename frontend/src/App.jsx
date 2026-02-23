@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import PricePredictor from './components/PricePredictor'
 import PriceHistory from './components/PriceHistory'
-import ModelInsights from './components/ModelInsights'
 import PipelineUpdater from './components/PipelineUpdater'
 
 const TABS = [
@@ -17,13 +16,6 @@ const TABS = [
     key: 'History', label: 'Price History', icon: (
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    )
-  },
-  {
-    key: 'Model Insights', label: 'Model Insights', icon: (
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
       </svg>
     )
   },
@@ -183,19 +175,19 @@ function App() {
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border ${isActive
-                        ? cat === 'All'
-                          ? 'bg-gray-800 text-white border-gray-800 shadow-md shadow-gray-800/20'
-                          : `${colors.active} text-white border-transparent shadow-md`
-                        : cat === 'All'
-                          ? 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                          : `bg-white ${colors.text} ${colors.border} hover:${colors.bg}`
+                      ? cat === 'All'
+                        ? 'bg-gray-800 text-white border-gray-800 shadow-md shadow-gray-800/20'
+                        : `${colors.active} text-white border-transparent shadow-md`
+                      : cat === 'All'
+                        ? 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        : `bg-white ${colors.text} ${colors.border} hover:${colors.bg}`
                       }`}
                   >
                     {cat !== 'All' && CATEGORY_ICONS[cat]}
                     <span>{cat}</span>
                     <span className={`text-xs px-1.5 py-0.5 rounded-md font-semibold ${isActive
-                        ? 'bg-white/20 text-white'
-                        : 'bg-gray-100 text-gray-500'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-gray-100 text-gray-500'
                       }`}>
                       {count}
                     </span>
@@ -228,8 +220,8 @@ function App() {
                     key={v.name}
                     onClick={() => setSelectedVeg(v.name)}
                     className={`relative group text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 border ${isSelected
-                        ? `${colors.selectedBg} text-white border-transparent shadow-md`
-                        : `bg-white ${colors.border} hover:shadow-sm hover:${colors.bg}`
+                      ? `${colors.selectedBg} text-white border-transparent shadow-md`
+                      : `bg-white ${colors.border} hover:shadow-sm hover:${colors.bg}`
                       }`}
                   >
                     <p className={`font-medium leading-tight text-xs ${isSelected ? 'text-white' : 'text-gray-800'
@@ -262,8 +254,8 @@ function App() {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === tab.key
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/25'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-white'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/25'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-white'
                   }`}
               >
                 {tab.icon}
@@ -281,7 +273,6 @@ function App() {
             setTimeout(() => setPipelineBounce(true), 400)
           }} />}
           {activeTab === 'History' && <PriceHistory vegetable={selectedVeg} />}
-          {activeTab === 'Model Insights' && <ModelInsights vegetable={selectedVeg} />}
         </div>
       </div>
 
