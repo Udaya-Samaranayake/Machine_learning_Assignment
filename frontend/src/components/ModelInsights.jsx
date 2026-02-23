@@ -137,8 +137,8 @@ export default function ModelInsights({ vegetable }) {
                 key={plot.key}
                 onClick={() => { setActivePlot(plot.key); setPlotLoading(true); setPlotKey(prev => prev + 1) }}
                 className={`px-3 py-2.5 text-xs font-semibold rounded-xl transition-all duration-200 border ${activePlot === plot.key
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
                   }`}
               >
                 {plot.label}
@@ -168,37 +168,6 @@ export default function ModelInsights({ vegetable }) {
         </div>
       </div>
 
-      {/* About */}
-      <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg p-6 text-white">
-        <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-          </svg>
-          About the Model
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
-          <div className="space-y-3">
-            <div>
-              <p className="text-emerald-400 font-semibold text-xs uppercase tracking-wider mb-1">Algorithm</p>
-              <p>XGBoost (Extreme Gradient Boosting) — an ensemble learning method building sequential decision trees with L1/L2 regularization to prevent overfitting.</p>
-            </div>
-            <div>
-              <p className="text-emerald-400 font-semibold text-xs uppercase tracking-wider mb-1">Features</p>
-              <p>{info.features_used} features including lag prices (1, 2, 4 weeks), rolling averages, seasonal indicators, and vegetable type encoding.</p>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <div>
-              <p className="text-emerald-400 font-semibold text-xs uppercase tracking-wider mb-1">Training</p>
-              <p>{info.training_samples.toLocaleString()} samples with chronological 70/15/15 split. Hyperparameters tuned via RandomizedSearchCV with 5-fold TimeSeriesSplit.</p>
-            </div>
-            <div>
-              <p className="text-emerald-400 font-semibold text-xs uppercase tracking-wider mb-1">Data Source</p>
-              <p>Department of Census & Statistics, Sri Lanka. Weekly retail prices from 14 markets in Colombo District (Jan 2017 — Jan 2026).</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
